@@ -1,8 +1,8 @@
 # Filament 5 compatibility verification
 
-The current branch targets `filament/filament: ^5.0` and `php: ^8.2`.
-Filament 4 is outside this change. Published alpha.3 still requires ^5.11.2;
-the compatibility change needs a new release before Packagist consumers receive it.
+Release `0.1.0-alpha.4` supports `filament/filament: ^5.0` and `php: ^8.2`.
+Filament 4 remains unsupported. Published alpha.3 retains its original ^5.11.2
+requirement; alpha.4 is the release that broadens replacement compatibility.
 
 Filament's documented PHP minimum and both its 5.0.0 and 5.11.2 Composer metadata
 require PHP ^8.2. Raising this package's floor to 8.3 would unnecessarily exclude
@@ -73,11 +73,23 @@ is unsupported, and a real Octane server has not been tested.
 Commit `5e42258` passed [all eight quality jobs](https://github.com/pitatumisang/filament-hugeicons/actions/runs/42798361459):
 minimum/latest on PHP 8.2, 8.3, and 8.4, plus exact 5.10.1 and the 5.11.2 reference
 report on PHP 8.4. The [workflow security check](https://github.com/pitatumisang/filament-hugeicons/actions/runs/42798361600)
-also passed. These results prove the candidate commit; no compatibility prerelease
-has been published and alpha.3's tag remains unchanged.
+also passed. These results prove the reviewed candidate commit. Alpha.4 publication and
+clean Packagist consumer verification are recorded below; alpha.3 remains unchanged.
 
 
 Independent review of the complete implementation found no actionable critical,
 important, or minor issues. Read-only probes on all three versions confirmed
 normalization semantics, override resolution, mapping inventory, and report
 determinism. Real Octane behavior and release publication remain outside this change.
+
+
+## Published compatibility release
+
+[Alpha.4](https://github.com/pitatumisang/filament-hugeicons/releases/tag/v0.1.0-alpha.4)
+was published from `f3286e2ae2eb4dce83de3390e6ba66c4a9c19f16` after all eight
+[release CI lanes](https://github.com/pitatumisang/filament-hugeicons/actions/runs/42799905365)
+passed. Packagist indexes that exact commit. Fresh Laravel 12 consumers installed
+exact `0.1.0-alpha.4` from Packagist, without path/VCS repositories or package
+development dependencies, while preserving every existing locked dependency on
+Filament 5.0.0 and 5.10.1. Discovery, rendering, replacement, fallback, and overrides
+passed in both consumers. See the [release verification record](releases/0.1.0-alpha.4.md).

@@ -2,7 +2,7 @@
 
 The current implementation supports replacing 81 of the 221 canonical aliases
 in the inspected Filament 5.11.2 source. See the [full mapped/unmapped report](default-icon-coverage.md).
-Alpha.3 includes replacement but requires Filament ^5.11.2. The next release broadens compatibility to ^5.0.
+Alpha.4 supports Filament ^5.0. Alpha.3 retains its original ^5.11.2 requirement.
 
 Replacement is **off by default**. Explicit `Hugeicon` usage always works without
 registering a panel plugin. Unmapped aliases retain Filament's original icons.
