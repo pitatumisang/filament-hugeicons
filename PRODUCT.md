@@ -130,11 +130,11 @@ Decide whether `replace_default_icons` is controlled by configuration, fluent pl
 ## 8. Acceptance criteria (v1)
 
 - [ ] Project can be installed through Composer with documented supported versions.
-- [ ] `Hugeicon` is a string-backed enum with validated names/values.
-- [ ] Every enum case resolves to a real registered SVG.
-- [ ] Enum works directly in representative Filament 5 icon APIs without `->value`.
-- [ ] Explicit icon usage works with no panel plugin registration.
-- [ ] Default Filament icons are unchanged unless replacement is enabled.
+- [x] `Hugeicon` is a string-backed enum with validated names/values.
+- [x] Every enum case resolves to a real registered SVG.
+- [x] Enum works directly in representative Filament 5 icon APIs without `->value`.
+- [x] Explicit icon usage works with no panel plugin registration.
+- [x] Default Filament icons are unchanged unless replacement is enabled.
 - [ ] Enabling replacement maps documented aliases and preserves fallback.
 - [ ] Custom override priority is tested.
 - [ ] Multi-panel limitations are tested and documented.

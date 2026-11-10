@@ -2,7 +2,7 @@
 
 A Laravel package in development that aims to make Hugeicons Free feel native to Filament 5 through a discoverable `Hugeicon` string-backed enum and optional replacement of Filament’s default icons.
 
-> **Status: initial scaffold and implementation specifications.** The local starter was manually assembled. Quality tooling has now been compared with and adapted from the official Filament 5 plugin skeleton; full reconciliation remains in progress. Development dependencies are installed, but icon identifiers, component compatibility, and alias behavior have not been verified. This is not yet a release-ready package.
+> **Status: catalog and explicit icon usage implemented.** The generated enum covers 6,839 SVGs from Blade Hugeicons 2.1.0. Native Filament 5 icon usage is tested without panel plugin registration. Optional default replacement is not implemented yet; this is not a complete v1 release.
 
 ## Project specifications
 
@@ -10,21 +10,24 @@ A Laravel package in development that aims to make Hugeicons Free feel native to
 - [ARCHITECTURE.md](ARCHITECTURE.md) defines the technical blueprint, verification requirements, and implementation phases.
 - [AGENTS.md](AGENTS.md) defines repository instructions for implementation work.
 
-Read the product and architecture documents in full before changing the implementation. Examples below describe the intended API, not working functionality in the current scaffold.
+Read the product and architecture documents in full before changing the implementation. Explicit enum examples below are verified; default-replacement examples describe the planned Phase 2 API.
 
-## Planned usage
+## Explicit icon usage
 
-Explicit icon usage will work after Composer installation and Laravel package auto-discovery, without registering a panel plugin or accessing `->value`:
+Explicit icon usage works after Composer installation and Laravel package auto-discovery, without registering a panel plugin or accessing `->value`:
 
 ```php
 use EnigmaInc\FilamentHugeicons\Icons\Hugeicon;
+use Filament\Actions\Action;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\IconColumn;
 
 Action::make('edit')->icon(Hugeicon::PencilEdit01);
 TextInput::make('search')->prefixIcon(Hugeicon::Search01);
 IconColumn::make('active')->trueIcon(Hugeicon::CheckmarkCircle01);
 ```
 
-These enum case names are illustrative until validated against the chosen SVG catalog. Filament 5 is the primary target; Filament 4 support is not promised.
+These cases resolve to real SVGs in the pinned catalog. Filament 5 is the primary target; Filament 4 support is not promised.
 
 ### Optional default icon replacement
 
@@ -50,7 +53,7 @@ An `overrideAliases([...])` API is planned, subject to verification of Filament�
 
 ## Architecture
 
-The intended rendering path uses the existing Filament and Blade Icons integrations:
+The rendering path uses the existing Filament and Blade Icons integrations:
 
 ```text
 Hugeicon enum case
@@ -59,15 +62,26 @@ Hugeicon enum case
     -> trusted Hugeicons Free SVG
 ```
 
-The enum will be generated deterministically from a pinned, verified free SVG catalog. Generation and CI must detect missing SVGs, naming collisions, duplicate values, and catalog drift. The package will not scan the entire catalog on each request, introduce a custom renderer, or override Filament views.
+The enum is generated deterministically from the pinned free SVG catalog. Generation and CI detect invalid catalogs, naming collisions, duplicate values, and output drift. The package will not scan the entire catalog on each request, introduce a custom renderer, or override Filament views.
 
 The implementation must adopt the actual [official plugin skeleton’s 5.x branch](https://github.com/filamentphp/plugin-skeleton/tree/5.x), including its package-tools setup, testing, quality tooling, and applicable workflows. The quality setup is adapted from upstream commit `820e4ead635a9c15ce59f767c9d0951282f5b388`; see [the reconciliation notes](docs/upstream-skeleton.md) for retained conventions and remaining differences.
 
 ## Installation status
 
-No supported installation command or compatibility matrix is available yet. The package identity is `enigmainc/filament-hugeicons` with PHP namespace `EnigmaInc\FilamentHugeicons`. The candidate Blade Hugeicons dependency is constrained to `^2.1` (locally resolved to 2.1.0). Its registered prefix, catalog, asset licensing, and rendering compatibility still require verification before release.
+No supported installation command or compatibility matrix is available yet. The package identity is `enigmainc/filament-hugeicons` with PHP namespace `EnigmaInc\FilamentHugeicons`. Blade Hugeicons is pinned to exactly `2.1.0` to preserve the public catalog across installations. The dependency registers the `hugeicons` collection and prefix; no second collection is registered.
 
 PHP and Laravel support will be documented after reconciliation with the official skeleton and verification against installed Filament 5 dependencies. Do not treat the scaffold’s Composer constraints as a tested support matrix.
+
+## Updating the catalog
+
+```sh
+composer icons:generate # Regenerate enum and manifest from the installed catalog
+composer icons:check    # Fail on drift in either output without changing files
+```
+
+`composer check` includes the catalog check, so CI detects drift. The manifest records source version/reference, case/value associations, and per-SVG SHA-256 hashes. A dependency update requires changing the exact Composer constraint and generator source-version validation, regenerating both outputs, and reviewing public case additions/removals and SVG changes. No SVG files are copied into this package. `composer test:composer` uses strict metadata validation with `--no-check-all` to skip Composer’s generic strict/loose constraint advice because the exact catalog pin is intentional.
+
+Keep the Blade dependency’s default `hugeicons` prefix. Changing `blade-hugeicons.prefix` makes the generated identifiers unresolved; this package does not overwrite application configuration. Enum case names preserve filename word boundaries and are case-sensitive: `PlayList` (`play-list`) and `Playlist` (`playlist`) are different cases.
 
 ## Implementation roadmap
 
@@ -82,6 +96,7 @@ Install development dependencies with `composer install`, then run:
 
 ```sh
 composer check          # All checks below; does not modify files
+composer test:composer  # Strict Composer metadata validation (exact pin is intentional)
 composer analyse        # PHPStan max (currently level 10), with Larastan
 composer test:lint      # Pint formatting check, including strict_types
 composer test:refactor  # Rector modernization check
@@ -91,10 +106,10 @@ composer test           # Full test suite
 
 To apply changes, use `composer refactor` followed by `composer lint` (`composer format` is also available). Rector derives its PHP language target from Composer’s minimum supported version, currently PHP 8.2, rather than the developer’s local runtime. It enables dead-code, code-quality, type-declaration, privatization, and early-return sets.
 
-PHPStan analyzes `src`, `config`, and `tests` at `max`, with no baseline or error suppressions. Architecture tests enforce strict types, the string-backed enum contract, icon independence from panel/container setup, native plugin/provider contracts, and restrictions on debugging, test tooling, and database dependencies in production code.
+PHPStan analyzes `src`, `config`, `tests`, and `scripts` at `max`, with no baseline or error suppressions. Architecture tests enforce strict types, the string-backed enum contract, icon independence from panel/container setup, native plugin/provider contracts, and restrictions on debugging, test tooling, and database dependencies in production code.
 
-The GitHub Actions quality job runs these checks on PHP 8.2–8.4 with Laravel 12. Local verification covers PHP 8.4 only; remote CI results are not yet available. The current suite proves scaffold architecture and Laravel provider/config boot behavior, including preservation of existing aliases with replacement disabled. A separate local Laravel 12 application also verified Composer path installation and provider auto-discovery without panel setup. Icon rendering and enabled replacement remain unverified. Every generated enum case must later resolve to a real registered SVG, with integration tests for native enum usage, opt-in replacement, fallback, overrides, and multi-panel limitations.
+The GitHub Actions quality job runs these checks on PHP 8.2–8.4 with Laravel 12. Local verification covers PHP 8.4 only; remote CI results are not yet available. The current suite proves scaffold architecture and Laravel provider/config boot behavior, including preservation of existing aliases with replacement disabled. A separate local Laravel 12 application also verified Composer path installation and provider auto-discovery without panel setup. Every enum case is tested against its actual registered SVG with fallbacks disabled. Actions, form prefixes, boolean table icons, and navigation items accept cases directly and render through Filament’s native icon helper. Enabled alias replacement, override precedence, and multi-panel isolation remain Phase 2 work.
 
 ## Licensing and scope
 
-The scaffold is licensed under [MIT](LICENSE). The selected icon dependency’s license and attribution requirements still need verification. Only Hugeicons Free assets are in scope; Hugeicons Pro assets will not be bundled. An icon picker, custom SVG renderer, and Filament view forks are outside v1 scope.
+This package is licensed under [MIT](LICENSE). The Blade wrapper and referenced Hugeicons Free source are MIT licensed; see [third-party notices](THIRD_PARTY_NOTICES.md) for provenance and license notices. Only Hugeicons Free assets are in scope; Hugeicons Pro assets will not be bundled. An icon picker, custom SVG renderer, and Filament view forks are outside v1 scope.
