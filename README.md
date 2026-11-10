@@ -1,8 +1,10 @@
 # Filament Hugeicons
 
-A Laravel package in development that aims to make Hugeicons Free feel native to Filament 5 through a discoverable `Hugeicon` string-backed enum and optional replacement of Filament’s default icons.
+Use Hugeicons Free in Filament 5 through the native `Hugeicon` string-backed enum, without panel plugin setup.
 
-> **Status: catalog and explicit icon usage implemented.** The generated enum covers 6,839 SVGs from Blade Hugeicons 2.1.0. Native Filament 5 icon usage is tested without panel plugin registration. Optional default replacement is not implemented yet; this is not a complete v1 release.
+> **Preparing `v0.1.0-alpha.1` — not published yet.** This alpha provides 6,839 enum cases from Blade Hugeicons 2.1.0 for explicit Filament 5 icon usage. Default icon replacement is pending verification and is outside this alpha’s documented scope. The public API and catalog may change before v1.0.0.
+
+> **Phase 2 development branch:** optional application-wide default replacement is implemented here. The planned alpha release described below covers Phase 1 only. See [default replacement usage and limitations](docs/default-icon-replacement.md) for this branch.
 
 ## Project specifications
 
@@ -10,7 +12,7 @@ A Laravel package in development that aims to make Hugeicons Free feel native to
 - [ARCHITECTURE.md](ARCHITECTURE.md) defines the technical blueprint, verification requirements, and implementation phases.
 - [AGENTS.md](AGENTS.md) defines repository instructions for implementation work.
 
-Read the product and architecture documents in full before changing the implementation. Explicit enum examples below are verified; default-replacement examples describe the planned Phase 2 API.
+Read the product and architecture documents in full before changing the implementation. Explicit enum examples below are verified; default replacement remains planned Phase 2 work.
 
 ## Explicit icon usage
 
@@ -29,27 +31,11 @@ IconColumn::make('active')->trueIcon(Hugeicon::CheckmarkCircle01);
 
 These cases resolve to real SVGs in the pinned catalog. Filament 5 is the primary target; Filament 4 support is not promised.
 
-### Optional default icon replacement
+### Default replacement is unavailable in this alpha
 
-Replacing Filament’s internal icon choices will be disabled by default and independent of explicit enum usage. The intended opt-in API is:
+Default replacement is excluded from this alpha. The retained skeleton exposes `replaceDefaultIcons()` but applies no mappings; `overrideAliases()` is unavailable. The reserved replacement config entries do not enable replacement. Do not register the plugin for explicit enum usage.
 
-```php
-use EnigmaInc\FilamentHugeicons\FilamentHugeiconsPlugin;
-
-$panel->plugin(
-    FilamentHugeiconsPlugin::make()->replaceDefaultIcons()
-);
-```
-
-The scaffold currently exposes the flag but does not register icon mappings. The planned behavior is:
-
-- Mapped aliases use curated Hugeicons equivalents when replacement is enabled.
-- Unmapped aliases retain Filament’s original icons.
-- Developer overrides take priority over bundled mappings.
-
-An `overrideAliases([...])` API is planned, subject to verification of Filament’s supported alias and value types. Configuration and fluent-option precedence must be finalized and tested before use.
-
-**Panel isolation is unverified.** Registering a plugin on one panel does not establish that replacements are scoped to that panel. If Filament’s registry is shared, replacement may be supported only application-wide; multi-panel behavior must be tested and documented before release.
+Explicit enum usage needs no plugin registration. Filament's default icons remain unchanged. Curated replacement mappings, override precedence, fallback tests, and verified multi-panel behavior are required before beta. No panel isolation is promised.
 
 ## Architecture
 
@@ -66,11 +52,24 @@ The enum is generated deterministically from the pinned free SVG catalog. Genera
 
 The implementation must adopt the actual [official plugin skeleton’s 5.x branch](https://github.com/filamentphp/plugin-skeleton/tree/5.x), including its package-tools setup, testing, quality tooling, and applicable workflows. The quality setup is adapted from upstream commit `820e4ead635a9c15ce59f767c9d0951282f5b388`; see [the reconciliation notes](docs/upstream-skeleton.md) for retained conventions and remaining differences.
 
-## Installation status
+## Installation
 
-No supported installation command or compatibility matrix is available yet. The package identity is `enigmainc/filament-hugeicons` with PHP namespace `EnigmaInc\FilamentHugeicons`. Blade Hugeicons is pinned to exactly `2.1.0` to preserve the public catalog across installations. The dependency registers the `hugeicons` collection and prefix; no second collection is registered.
+The command below is for use **after** `v0.1.0-alpha.1` is tagged and available on Packagist; publication has not been verified:
 
-PHP and Laravel support will be documented after reconciliation with the official skeleton and verification against installed Filament 5 dependencies. Do not treat the scaffold’s Composer constraints as a tested support matrix.
+```sh
+composer require enigmainc/filament-hugeicons:0.1.0-alpha.1
+```
+
+The explicit prerelease constraint allows this alpha without changing your application's global `minimum-stability`. Laravel auto-discovers the providers; no panel plugin or config publication is needed for explicit icons.
+
+| Dependency | Declared constraint / verification |
+| --- | --- |
+| PHP | `^8.2`; local checks on PHP 8.4, CI configured for 8.2–8.4 |
+| Filament | `^5.0`; Filament 4 is unsupported |
+| Laravel | Local integration verified on Laravel 12; CI targets Laravel 12 |
+| Blade Hugeicons | Exactly `2.1.0`, preserving the generated catalog |
+
+Configured CI jobs are not evidence of passing remote runs. See [release preparation](docs/releases/0.1.0-alpha.1.md) for outstanding publication gates. The dependency registers the `hugeicons` collection and prefix; this package registers no second collection.
 
 ## Updating the catalog
 
