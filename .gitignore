@@ -4,3 +4,6 @@
 /.phpunit-watcher.yml
 /composer.lock
 /.idea/
+
+/build/
+/.pint.cache

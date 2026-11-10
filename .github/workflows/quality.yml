@@ -1,0 +1,38 @@
+# Adapted from filamentphp/plugin-skeleton 5.x at 820e4ead635a9c15ce59f767c9d0951282f5b388.
+name: quality
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+    name: PHP ${{ matrix.php }} / Laravel 12
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Setup PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl, gd, exif, iconv, fileinfo
+          coverage: none
+      - name: Validate Composer metadata
+        run: composer validate --strict --no-check-lock
+      - name: Resolve compatible dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction
+      - name: Check formatting, modernization, static analysis, and architecture
+        run: composer check

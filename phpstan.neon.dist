@@ -1,4 +1,14 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
+
 parameters:
-    level: 5
+    level: max
     paths:
         - src
+        - config
+        - tests
+    tmpDir: build/phpstan
+    checkOctaneCompatibility: true
+    checkModelProperties: true
+    reportUnmatchedIgnoredErrors: true

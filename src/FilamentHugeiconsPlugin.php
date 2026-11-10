@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Vendor\FilamentHugeicons;
 
 use Filament\Contracts\Plugin;
@@ -11,7 +13,13 @@ class FilamentHugeiconsPlugin implements Plugin
 
     public static function make(): static
     {
-        return app(static::class);
+        $plugin = app(static::class);
+
+        if (! $plugin instanceof static) {
+            throw new \LogicException('The plugin binding must resolve to an instance of ' . static::class . '.');
+        }
+
+        return $plugin;
     }
 
     public function getId(): string

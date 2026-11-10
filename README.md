@@ -2,7 +2,7 @@
 
 A Laravel package in development that aims to make Hugeicons Free feel native to Filament 5 through a discoverable `Hugeicon` string-backed enum and optional replacement of Filament’s default icons.
 
-> **Status: initial scaffold and implementation specifications.** The local starter was manually assembled and has not been reconciled with the official Filament plugin skeleton. Dependencies, icon identifiers, component compatibility, and alias behavior have not been verified. This is not yet a release-ready package.
+> **Status: initial scaffold and implementation specifications.** The local starter was manually assembled. Quality tooling has now been compared with and adapted from the official Filament 5 plugin skeleton; full reconciliation remains in progress. Development dependencies are installed, but icon identifiers, component compatibility, and alias behavior have not been verified. This is not yet a release-ready package.
 
 ## Project specifications
 
@@ -61,11 +61,11 @@ Hugeicon enum case
 
 The enum will be generated deterministically from a pinned, verified free SVG catalog. Generation and CI must detect missing SVGs, naming collisions, duplicate values, and catalog drift. The package will not scan the entire catalog on each request, introduce a custom renderer, or override Filament views.
 
-The implementation must adopt the actual [official plugin skeleton’s 5.x branch](https://github.com/filamentphp/plugin-skeleton/tree/5.x), including its package-tools setup, testing, quality tooling, and applicable workflows. Upstream parity has not yet been established.
+The implementation must adopt the actual [official plugin skeleton’s 5.x branch](https://github.com/filamentphp/plugin-skeleton/tree/5.x), including its package-tools setup, testing, quality tooling, and applicable workflows. The quality setup is adapted from upstream commit `820e4ead635a9c15ce59f767c9d0951282f5b388`; see [the reconciliation notes](docs/upstream-skeleton.md) for retained conventions and remaining differences.
 
 ## Installation status
 
-No supported installation command or compatibility matrix is available yet. The current Composer vendor name and PHP namespace are placeholders, and the candidate Blade Hugeicons dependency uses a temporary wildcard constraint. Its version, registered prefix, filenames, license, and compatibility must be verified before a release constraint is selected.
+No supported installation command or compatibility matrix is available yet. The current Composer vendor name and PHP namespace are placeholders, and the candidate Blade Hugeicons dependency is constrained to `^2.1` (locally resolved to 2.1.0). Its registered prefix, catalog, asset licensing, and rendering compatibility still require verification before release.
 
 PHP and Laravel support will be documented after reconciliation with the official skeleton and verification against installed Filament 5 dependencies. Do not treat the scaffold’s Composer constraints as a tested support matrix.
 
@@ -78,7 +78,22 @@ PHP and Laravel support will be documented after reconciliation with the officia
 
 ## Validation
 
-Dependencies have not been installed or verified. Pest, PHPStan/Larastan, Pint, Rector, and applicable skeleton checks must run using the reconciled upstream tooling before passing results can be claimed. Every generated enum case must resolve to a real registered SVG; integration tests must cover native enum usage, opt-in replacement, fallback, overrides, and multi-panel limitations.
+Install development dependencies with `composer install`, then run:
+
+```sh
+composer check          # All checks below; does not modify files
+composer analyse        # PHPStan max (currently level 10), with Larastan
+composer test:lint      # Pint formatting check, including strict_types
+composer test:refactor  # Rector modernization check
+composer test:arch      # Pest architecture rules
+composer test           # Full test suite
+```
+
+To apply changes, use `composer refactor` followed by `composer lint` (`composer format` is also available). Rector derives its PHP language target from Composer’s minimum supported version, currently PHP 8.2, rather than the developer’s local runtime. It enables dead-code, code-quality, type-declaration, privatization, and early-return sets.
+
+PHPStan analyzes `src`, `config`, and `tests` at `max`, with no baseline or error suppressions. Architecture tests enforce strict types, the string-backed enum contract, icon independence from panel/container setup, native plugin/provider contracts, and restrictions on debugging, test tooling, and database dependencies in production code.
+
+The GitHub Actions quality job runs these checks on PHP 8.2–8.4 with Laravel 12. Local verification covers PHP 8.4 only; remote CI results are not yet available. The current suite proves scaffold architecture, not icon rendering or replacement. Every generated enum case must later resolve to a real registered SVG, with integration tests for native enum usage, opt-in replacement, fallback, overrides, and multi-panel limitations.
 
 ## Licensing and scope
 
