@@ -31,7 +31,7 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl, gd, exif, iconv, fileinfo
           coverage: none
       - name: Validate Composer metadata
-        run: composer validate --strict --no-check-lock
+        run: composer test:composer
       - name: Resolve compatible dependencies
         run: composer update --prefer-stable --prefer-dist --no-interaction
       - name: Check formatting, modernization, static analysis, and architecture

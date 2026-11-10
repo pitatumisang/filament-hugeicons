@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
+use EnigmaInc\FilamentHugeicons\FilamentHugeiconsPlugin;
+use EnigmaInc\FilamentHugeicons\FilamentHugeiconsServiceProvider;
+use EnigmaInc\FilamentHugeicons\Icons\Hugeicon;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Illuminate\Container\Container;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Vendor\FilamentHugeicons\FilamentHugeiconsPlugin;
-use Vendor\FilamentHugeicons\FilamentHugeiconsServiceProvider;
-use Vendor\FilamentHugeicons\Icons\Hugeicon;
 
 arch('package PHP files use strict types', function (): void {
-    expect('Vendor\FilamentHugeicons')
+    expect('EnigmaInc\FilamentHugeicons')
         ->toUseStrictTypes();
 })->group('arch');
 
@@ -21,7 +21,7 @@ arch('production code does not use debugging or process termination', function (
 })->group('arch');
 
 arch('production code is independent of test tooling and database models', function (): void {
-    expect('Vendor\FilamentHugeicons')
+    expect('EnigmaInc\FilamentHugeicons')
         ->not->toUse(['Pest', 'PHPUnit', 'Orchestra\Testbench', 'Illuminate\Database\Eloquent']);
 })->group('arch');
 
@@ -31,7 +31,7 @@ arch('the public icon API is a string backed enum', function (): void {
 })->group('arch');
 
 arch('icons remain independent of panel lifecycle and container resolution', function (): void {
-    expect('Vendor\FilamentHugeicons\Icons')
+    expect('EnigmaInc\FilamentHugeicons\Icons')
         ->not->toUse([Panel::class, Plugin::class, Container::class, 'app', 'resolve']);
 })->group('arch');
 

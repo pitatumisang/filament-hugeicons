@@ -1,5 +1,5 @@
 {
-    "name": "vendor/filament-hugeicons",
+    "name": "enigmainc/filament-hugeicons",
     "description": "Hugeicons integration for Filament with optional default icon replacement",
     "type": "library",
     "license": "MIT",
@@ -7,22 +7,23 @@
         "php": "^8.2",
         "filament/filament": "^5.0",
         "spatie/laravel-package-tools": "^1.16",
-        "afatmustafa/blade-hugeicons": "^2.1"
+        "afatmustafa/blade-hugeicons": "2.1.0"
     },
     "autoload": {
         "psr-4": {
-            "Vendor\\FilamentHugeicons\\": "src/"
+            "EnigmaInc\\FilamentHugeicons\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Vendor\\FilamentHugeicons\\Tests\\": "tests/"
+            "EnigmaInc\\FilamentHugeicons\\Tests\\": "tests/",
+            "EnigmaInc\\FilamentHugeicons\\Development\\": "scripts/Support/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Vendor\\FilamentHugeicons\\FilamentHugeiconsServiceProvider"
+                "EnigmaInc\\FilamentHugeicons\\FilamentHugeiconsServiceProvider"
             ]
         }
     },
@@ -37,11 +38,16 @@
         "test:lint": "pint --test",
         "test:refactor": "rector --dry-run",
         "check": [
+            "@test:composer",
+            "@icons:check",
             "@test:lint",
             "@test:refactor",
             "@analyse",
             "@test"
-        ]
+        ],
+        "icons:generate": "@php scripts/generate-icons.php",
+        "icons:check": "@php scripts/generate-icons.php --check",
+        "test:composer": "@composer validate --strict --no-check-lock --no-check-all"
     },
     "require-dev": {
         "larastan/larastan": "^3.0",

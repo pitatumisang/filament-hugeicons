@@ -1,8 +1,10 @@
 # Filament Hugeicons
 
-A Laravel package in development that aims to make Hugeicons Free feel native to Filament 5 through a discoverable `Hugeicon` string-backed enum and optional replacement of Filament’s default icons.
+Use Hugeicons Free in Filament 5 through the native `Hugeicon` string-backed enum, without panel plugin setup.
 
-> **Status: initial scaffold and implementation specifications.** The local starter was manually assembled. Quality tooling has now been compared with and adapted from the official Filament 5 plugin skeleton; full reconciliation remains in progress. Development dependencies are installed, but icon identifiers, component compatibility, and alias behavior have not been verified. This is not yet a release-ready package.
+> **Preparing `v0.1.0-alpha.1` — not published yet.** This alpha provides 6,839 enum cases from Blade Hugeicons 2.1.0 for explicit Filament 5 icon usage. Default icon replacement is pending verification and is outside this alpha’s documented scope. The public API and catalog may change before v1.0.0.
+
+> **Phase 2 development branch:** optional application-wide default replacement is implemented here. The planned alpha release described below covers Phase 1 only. See [default replacement usage and limitations](docs/default-icon-replacement.md) for this branch.
 
 ## Project specifications
 
@@ -10,47 +12,34 @@ A Laravel package in development that aims to make Hugeicons Free feel native to
 - [ARCHITECTURE.md](ARCHITECTURE.md) defines the technical blueprint, verification requirements, and implementation phases.
 - [AGENTS.md](AGENTS.md) defines repository instructions for implementation work.
 
-Read the product and architecture documents in full before changing the implementation. Examples below describe the intended API, not working functionality in the current scaffold.
+Read the product and architecture documents in full before changing the implementation. Explicit enum examples below are verified; default replacement remains planned Phase 2 work.
 
-## Planned usage
+## Explicit icon usage
 
-Explicit icon usage will work after Composer installation and Laravel package auto-discovery, without registering a panel plugin or accessing `->value`:
+Explicit icon usage works after Composer installation and Laravel package auto-discovery, without registering a panel plugin or accessing `->value`:
 
 ```php
-use Vendor\FilamentHugeicons\Icons\Hugeicon;
+use EnigmaInc\FilamentHugeicons\Icons\Hugeicon;
+use Filament\Actions\Action;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\IconColumn;
 
 Action::make('edit')->icon(Hugeicon::PencilEdit01);
 TextInput::make('search')->prefixIcon(Hugeicon::Search01);
 IconColumn::make('active')->trueIcon(Hugeicon::CheckmarkCircle01);
 ```
 
-`Vendor` is a placeholder pending publisher selection. These enum case names are illustrative until validated against the chosen SVG catalog. Filament 5 is the primary target; Filament 4 support is not promised.
+These cases resolve to real SVGs in the pinned catalog. Filament 5 is the primary target; Filament 4 support is not promised.
 
-### Optional default icon replacement
+### Default replacement is unavailable in this alpha
 
-Replacing Filament’s internal icon choices will be disabled by default and independent of explicit enum usage. The intended opt-in API is:
+Default replacement is excluded from this alpha. The retained skeleton exposes `replaceDefaultIcons()` but applies no mappings; `overrideAliases()` is unavailable. The reserved replacement config entries do not enable replacement. Do not register the plugin for explicit enum usage.
 
-```php
-use Vendor\FilamentHugeicons\FilamentHugeiconsPlugin;
-
-$panel->plugin(
-    FilamentHugeiconsPlugin::make()->replaceDefaultIcons()
-);
-```
-
-The scaffold currently exposes the flag but does not register icon mappings. The planned behavior is:
-
-- Mapped aliases use curated Hugeicons equivalents when replacement is enabled.
-- Unmapped aliases retain Filament’s original icons.
-- Developer overrides take priority over bundled mappings.
-
-An `overrideAliases([...])` API is planned, subject to verification of Filament’s supported alias and value types. Configuration and fluent-option precedence must be finalized and tested before use.
-
-**Panel isolation is unverified.** Registering a plugin on one panel does not establish that replacements are scoped to that panel. If Filament’s registry is shared, replacement may be supported only application-wide; multi-panel behavior must be tested and documented before release.
+Explicit enum usage needs no plugin registration. Filament's default icons remain unchanged. Curated replacement mappings, override precedence, fallback tests, and verified multi-panel behavior are required before beta. No panel isolation is promised.
 
 ## Architecture
 
-The intended rendering path uses the existing Filament and Blade Icons integrations:
+The rendering path uses the existing Filament and Blade Icons integrations:
 
 ```text
 Hugeicon enum case
@@ -59,15 +48,39 @@ Hugeicon enum case
     -> trusted Hugeicons Free SVG
 ```
 
-The enum will be generated deterministically from a pinned, verified free SVG catalog. Generation and CI must detect missing SVGs, naming collisions, duplicate values, and catalog drift. The package will not scan the entire catalog on each request, introduce a custom renderer, or override Filament views.
+The enum is generated deterministically from the pinned free SVG catalog. Generation and CI detect invalid catalogs, naming collisions, duplicate values, and output drift. The package will not scan the entire catalog on each request, introduce a custom renderer, or override Filament views.
 
 The implementation must adopt the actual [official plugin skeleton’s 5.x branch](https://github.com/filamentphp/plugin-skeleton/tree/5.x), including its package-tools setup, testing, quality tooling, and applicable workflows. The quality setup is adapted from upstream commit `820e4ead635a9c15ce59f767c9d0951282f5b388`; see [the reconciliation notes](docs/upstream-skeleton.md) for retained conventions and remaining differences.
 
-## Installation status
+## Installation
 
-No supported installation command or compatibility matrix is available yet. The current Composer vendor name and PHP namespace are placeholders, and the candidate Blade Hugeicons dependency is constrained to `^2.1` (locally resolved to 2.1.0). Its registered prefix, catalog, asset licensing, and rendering compatibility still require verification before release.
+The command below is for use **after** `v0.1.0-alpha.1` is tagged and available on Packagist; publication has not been verified:
 
-PHP and Laravel support will be documented after reconciliation with the official skeleton and verification against installed Filament 5 dependencies. Do not treat the scaffold’s Composer constraints as a tested support matrix.
+```sh
+composer require enigmainc/filament-hugeicons:0.1.0-alpha.1
+```
+
+The explicit prerelease constraint allows this alpha without changing your application's global `minimum-stability`. Laravel auto-discovers the providers; no panel plugin or config publication is needed for explicit icons.
+
+| Dependency | Declared constraint / verification |
+| --- | --- |
+| PHP | `^8.2`; local checks on PHP 8.4, CI configured for 8.2–8.4 |
+| Filament | `^5.0`; Filament 4 is unsupported |
+| Laravel | Local integration verified on Laravel 12; CI targets Laravel 12 |
+| Blade Hugeicons | Exactly `2.1.0`, preserving the generated catalog |
+
+Configured CI jobs are not evidence of passing remote runs. See [release preparation](docs/releases/0.1.0-alpha.1.md) for outstanding publication gates. The dependency registers the `hugeicons` collection and prefix; this package registers no second collection.
+
+## Updating the catalog
+
+```sh
+composer icons:generate # Regenerate enum and manifest from the installed catalog
+composer icons:check    # Fail on drift in either output without changing files
+```
+
+`composer check` includes the catalog check, so CI detects drift. The manifest records source version/reference, case/value associations, and per-SVG SHA-256 hashes. A dependency update requires changing the exact Composer constraint and generator source-version validation, regenerating both outputs, and reviewing public case additions/removals and SVG changes. No SVG files are copied into this package. `composer test:composer` uses strict metadata validation with `--no-check-all` to skip Composer’s generic strict/loose constraint advice because the exact catalog pin is intentional.
+
+Keep the Blade dependency’s default `hugeicons` prefix. Changing `blade-hugeicons.prefix` makes the generated identifiers unresolved; this package does not overwrite application configuration. Enum case names preserve filename word boundaries and are case-sensitive: `PlayList` (`play-list`) and `Playlist` (`playlist`) are different cases.
 
 ## Implementation roadmap
 
@@ -82,6 +95,7 @@ Install development dependencies with `composer install`, then run:
 
 ```sh
 composer check          # All checks below; does not modify files
+composer test:composer  # Strict Composer metadata validation (exact pin is intentional)
 composer analyse        # PHPStan max (currently level 10), with Larastan
 composer test:lint      # Pint formatting check, including strict_types
 composer test:refactor  # Rector modernization check
@@ -91,10 +105,10 @@ composer test           # Full test suite
 
 To apply changes, use `composer refactor` followed by `composer lint` (`composer format` is also available). Rector derives its PHP language target from Composer’s minimum supported version, currently PHP 8.2, rather than the developer’s local runtime. It enables dead-code, code-quality, type-declaration, privatization, and early-return sets.
 
-PHPStan analyzes `src`, `config`, and `tests` at `max`, with no baseline or error suppressions. Architecture tests enforce strict types, the string-backed enum contract, icon independence from panel/container setup, native plugin/provider contracts, and restrictions on debugging, test tooling, and database dependencies in production code.
+PHPStan analyzes `src`, `config`, `tests`, and `scripts` at `max`, with no baseline or error suppressions. Architecture tests enforce strict types, the string-backed enum contract, icon independence from panel/container setup, native plugin/provider contracts, and restrictions on debugging, test tooling, and database dependencies in production code.
 
-The GitHub Actions quality job runs these checks on PHP 8.2–8.4 with Laravel 12. Local verification covers PHP 8.4 only; remote CI results are not yet available. The current suite proves scaffold architecture, not icon rendering or replacement. Every generated enum case must later resolve to a real registered SVG, with integration tests for native enum usage, opt-in replacement, fallback, overrides, and multi-panel limitations.
+The GitHub Actions quality job runs these checks on PHP 8.2–8.4 with Laravel 12. Local verification covers PHP 8.4 only; remote CI results are not yet available. The current suite proves scaffold architecture and Laravel provider/config boot behavior, including preservation of existing aliases with replacement disabled. A separate local Laravel 12 application also verified Composer path installation and provider auto-discovery without panel setup. Every enum case is tested against its actual registered SVG with fallbacks disabled. Actions, form prefixes, boolean table icons, and navigation items accept cases directly and render through Filament’s native icon helper. Enabled alias replacement, override precedence, and multi-panel isolation remain Phase 2 work.
 
 ## Licensing and scope
 
-The scaffold is licensed under [MIT](LICENSE). The selected icon dependency’s license and attribution requirements still need verification. Only Hugeicons Free assets are in scope; Hugeicons Pro assets will not be bundled. An icon picker, custom SVG renderer, and Filament view forks are outside v1 scope.
+This package is licensed under [MIT](LICENSE). The Blade wrapper and referenced Hugeicons Free source are MIT licensed; see [third-party notices](THIRD_PARTY_NOTICES.md) for provenance and license notices. Only Hugeicons Free assets are in scope; Hugeicons Pro assets will not be bundled. An icon picker, custom SVG renderer, and Filament view forks are outside v1 scope.

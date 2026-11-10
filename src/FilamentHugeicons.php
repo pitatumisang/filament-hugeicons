@@ -2,6 +2,6 @@
 
 declare(strict_types=1);
 
-namespace Vendor\FilamentHugeicons;
+namespace EnigmaInc\FilamentHugeicons;
 
 final class FilamentHugeicons {}
