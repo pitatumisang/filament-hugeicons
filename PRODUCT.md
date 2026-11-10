@@ -135,9 +135,9 @@ Decide whether `replace_default_icons` is controlled by configuration, fluent pl
 - [x] Enum works directly in representative Filament 5 icon APIs without `->value`.
 - [x] Explicit icon usage works with no panel plugin registration.
 - [x] Default Filament icons are unchanged unless replacement is enabled.
-- [ ] Enabling replacement maps documented aliases and preserves fallback.
-- [ ] Custom override priority is tested.
-- [ ] Multi-panel limitations are tested and documented.
+- [x] Enabling replacement maps documented aliases and preserves fallback.
+- [x] Custom override priority is tested.
+- [x] Multi-panel limitations are tested and documented.
 - [ ] Package passes Pest, PHPStan/Larastan, Pint and applicable skeleton checks.
 - [ ] README documents install, usage, opt-in replacement, customization, limits and licensing.
 

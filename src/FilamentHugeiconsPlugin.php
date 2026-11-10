@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace EnigmaInc\FilamentHugeicons;
 
+use EnigmaInc\FilamentHugeicons\Icons\Hugeicon;
+use EnigmaInc\FilamentHugeicons\Support\IconMappingRegistry;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
 class FilamentHugeiconsPlugin implements Plugin
 {
-    protected bool $replaceDefaultIcons = false;
+    protected ?bool $replaceDefaultIcons = null;
+
+    /** @var array<string, string> */
+    protected array $overrides = [];
 
     public static function make(): static
     {
@@ -34,17 +39,21 @@ class FilamentHugeiconsPlugin implements Plugin
         return $this;
     }
 
+    /** @param array<string, Hugeicon|string> $aliases */
+    public function overrideAliases(array $aliases): static
+    {
+        $this->overrides = array_replace($this->overrides, IconMappingRegistry::normalizeOverrides($aliases));
+
+        return $this;
+    }
+
     public function register(Panel $panel): void
     {
-        // Explicit Hugeicon enum usage requires no panel registration.
+        app(IconMappingRegistry::class)->declare($this->replaceDefaultIcons, $this->overrides);
     }
 
     public function boot(Panel $panel): void
     {
-        if (! $this->replaceDefaultIcons) {
-            return;
-        }
-
-        // TODO: Register verified Filament 5 icon aliases once mappings are validated.
+        app(IconMappingRegistry::class)->declare($this->replaceDefaultIcons, $this->overrides);
     }
 }

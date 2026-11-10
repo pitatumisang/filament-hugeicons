@@ -4,6 +4,8 @@
 
 > Status: implementation blueprint, 2026-11-10. Agreed design is normative; APIs/dependency details marked **VERIFY** must be checked against installed upstream code. This is not a claim that the existing local starter is an official skeleton clone.
 
+> Phase 2 implementation note: this branch requires Filament `^5.11.2` for the verified native alias-normalization API. Replacement is application-wide and disabled by default; see `docs/default-icon-replacement.md` for finalized precedence, lifecycle, and limitations. Earlier proposed options below are retained as design history.
+
 ## 1. Architectural principles
 
 1. **Official skeleton first:** initialize/reconcile against `filamentphp/plugin-skeleton` branch `5.x`; do not maintain a hand-invented alternative to skeleton conventions.
