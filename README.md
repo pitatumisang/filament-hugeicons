@@ -4,25 +4,17 @@ Use [Hugeicons Free](https://hugeicons.com/) in Filament 5 with a discoverable, 
 
 ## Installation
 
-The next release supports **Filament `^5.0` and PHP `^8.2`**, including Filament 5.10.1. This compatibility update is not yet published. The published `0.1.0-alpha.3` release still requires Filament `^5.11.2`.
-
 In your existing Laravel / Filament 5 application, run:
 
 ```sh
-composer require enigmainc/filament-hugeicons:0.1.0-alpha.3 -W
+composer require enigmainc/filament-hugeicons:0.1.0-alpha.4 -W
 ```
 
-The `-W` option allows Composer to update locked dependencies, including Filament, to compatible versions. If your application's `composer.json` pins Filament to an older version, update that constraint too:
-
-```sh
-composer require enigmainc/filament-hugeicons:0.1.0-alpha.3 'filament/filament:^5.11.2' -W
-```
+The `-W` option allows Composer to update locked dependencies when required. Existing compatible Filament 5 versions, including 5.10.1, satisfy this package's Filament requirement.
 
 The explicit version installs the alpha without changing your application's `minimum-stability`. Laravel discovers the package and its Blade Icons dependency automatically. No panel plugin registration, config publishing, or asset build is required.
 
 ### Requirements
-
-For the next release:
 
 - PHP `^8.2`: PHP 8.2 or later within PHP 8.x.
 - Filament `^5.0`: stable Filament 5.x releases, including 5.0.0 and 5.10.1. Filament 4 is unsupported.
@@ -34,7 +26,7 @@ Composer installs these package dependencies automatically:
 
 | Dependency | Version |
 | --- | --- |
-| `filament/filament` | `^5.0` in the next release; `^5.11.2` in alpha.3 |
+| `filament/filament` | `^5.0` |
 | `spatie/laravel-package-tools` | `^1.16` |
 | `afatmustafa/blade-hugeicons` | `2.1.0` |
 
@@ -93,7 +85,7 @@ NavigationItem::make('Home')
 
 ### Finding icons
 
-Type `Hugeicon::` in your IDE to browse the available cases, or browse the [enum catalog for this release](https://github.com/pitatumisang/filament-hugeicons/blob/v0.1.0-alpha.3/src/Icons/Hugeicon.php).
+Type `Hugeicon::` in your IDE to browse the available cases, or browse the [enum catalog for this release](https://github.com/pitatumisang/filament-hugeicons/blob/v0.1.0-alpha.4/src/Icons/Hugeicon.php).
 
 Case names are case-sensitive and preserve filename word boundaries: `PlayList` and `Playlist` are different icons. If another API requires a string, use the backing value, for example `Hugeicon::Home01->value` returns `hugeicons-home-01`.
 

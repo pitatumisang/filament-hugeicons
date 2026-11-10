@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.0-alpha.4 — 2026-11-10
 
 ### Changed
 
@@ -13,8 +13,6 @@
 
 - Pass minimum/latest Filament CI on PHP 8.2, 8.3, and 8.4 with Laravel 12, plus exact 5.10.1 regression and 5.11.2 reference-report lanes.
 - Install the candidate in isolated Laravel 12 consumers locked to Filament 5.0.0 and 5.10.1 without updating existing locked dependencies; verify enum rendering, replacement, fallback, and overrides.
-
-These changes require a new release. Published `0.1.0-alpha.3` retains its original Filament `^5.11.2` requirement.
 
 ## 0.1.0-alpha.3 — 2026-11-10
 
