@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use EnigmaInc\FilamentHugeicons\FilamentHugeiconsPlugin;
 use Illuminate\Container\Container;
-use Vendor\FilamentHugeicons\FilamentHugeiconsPlugin;
 
 it('resolves the plugin from its container binding', function (): void {
     $previousContainer = Container::getInstance();

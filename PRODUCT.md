@@ -1,5 +1,7 @@
 # Filament Hugeicons — Product Design
 
+> Publisher selected on 2026-11-10: Composer `enigmainc/filament-hugeicons`, PHP namespace `EnigmaInc\FilamentHugeicons`. Earlier `Vendor` examples below are illustrative placeholders; implementation and README use the selected identity.
+
 > Status: implementation specification, 2026-11-10. This document captures agreed product requirements. Examples of icon case names are illustrative until validated against the selected SVG catalog.
 
 ## 1. Vision

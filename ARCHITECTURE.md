@@ -1,5 +1,7 @@
 # Filament Hugeicons — Technical Architecture
 
+> Publisher selected on 2026-11-10: Composer `enigmainc/filament-hugeicons`, PHP namespace `EnigmaInc\FilamentHugeicons`. Earlier `Vendor` examples below are illustrative placeholders; implementation and README use the selected identity.
+
 > Status: implementation blueprint, 2026-11-10. Agreed design is normative; APIs/dependency details marked **VERIFY** must be checked against installed upstream code. This is not a claim that the existing local starter is an official skeleton clone.
 
 ## 1. Architectural principles

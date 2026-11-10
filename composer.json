@@ -1,5 +1,5 @@
 {
-    "name": "vendor/filament-hugeicons",
+    "name": "enigmainc/filament-hugeicons",
     "description": "Hugeicons integration for Filament with optional default icon replacement",
     "type": "library",
     "license": "MIT",
@@ -11,18 +11,18 @@
     },
     "autoload": {
         "psr-4": {
-            "Vendor\\FilamentHugeicons\\": "src/"
+            "EnigmaInc\\FilamentHugeicons\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Vendor\\FilamentHugeicons\\Tests\\": "tests/"
+            "EnigmaInc\\FilamentHugeicons\\Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Vendor\\FilamentHugeicons\\FilamentHugeiconsServiceProvider"
+                "EnigmaInc\\FilamentHugeicons\\FilamentHugeiconsServiceProvider"
             ]
         }
     },

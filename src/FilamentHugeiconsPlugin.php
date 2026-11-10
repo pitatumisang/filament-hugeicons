@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Vendor\FilamentHugeicons;
+namespace EnigmaInc\FilamentHugeicons;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;

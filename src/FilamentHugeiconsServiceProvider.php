@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Vendor\FilamentHugeicons;
+namespace EnigmaInc\FilamentHugeicons;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;

@@ -17,21 +17,21 @@ Read the product and architecture documents in full before changing the implemen
 Explicit icon usage will work after Composer installation and Laravel package auto-discovery, without registering a panel plugin or accessing `->value`:
 
 ```php
-use Vendor\FilamentHugeicons\Icons\Hugeicon;
+use EnigmaInc\FilamentHugeicons\Icons\Hugeicon;
 
 Action::make('edit')->icon(Hugeicon::PencilEdit01);
 TextInput::make('search')->prefixIcon(Hugeicon::Search01);
 IconColumn::make('active')->trueIcon(Hugeicon::CheckmarkCircle01);
 ```
 
-`Vendor` is a placeholder pending publisher selection. These enum case names are illustrative until validated against the chosen SVG catalog. Filament 5 is the primary target; Filament 4 support is not promised.
+These enum case names are illustrative until validated against the chosen SVG catalog. Filament 5 is the primary target; Filament 4 support is not promised.
 
 ### Optional default icon replacement
 
 Replacing Filament’s internal icon choices will be disabled by default and independent of explicit enum usage. The intended opt-in API is:
 
 ```php
-use Vendor\FilamentHugeicons\FilamentHugeiconsPlugin;
+use EnigmaInc\FilamentHugeicons\FilamentHugeiconsPlugin;
 
 $panel->plugin(
     FilamentHugeiconsPlugin::make()->replaceDefaultIcons()
@@ -65,7 +65,7 @@ The implementation must adopt the actual [official plugin skeleton’s 5.x branc
 
 ## Installation status
 
-No supported installation command or compatibility matrix is available yet. The current Composer vendor name and PHP namespace are placeholders, and the candidate Blade Hugeicons dependency is constrained to `^2.1` (locally resolved to 2.1.0). Its registered prefix, catalog, asset licensing, and rendering compatibility still require verification before release.
+No supported installation command or compatibility matrix is available yet. The package identity is `enigmainc/filament-hugeicons` with PHP namespace `EnigmaInc\FilamentHugeicons`. The candidate Blade Hugeicons dependency is constrained to `^2.1` (locally resolved to 2.1.0). Its registered prefix, catalog, asset licensing, and rendering compatibility still require verification before release.
 
 PHP and Laravel support will be documented after reconciliation with the official skeleton and verification against installed Filament 5 dependencies. Do not treat the scaffold’s Composer constraints as a tested support matrix.
 
@@ -93,7 +93,7 @@ To apply changes, use `composer refactor` followed by `composer lint` (`composer
 
 PHPStan analyzes `src`, `config`, and `tests` at `max`, with no baseline or error suppressions. Architecture tests enforce strict types, the string-backed enum contract, icon independence from panel/container setup, native plugin/provider contracts, and restrictions on debugging, test tooling, and database dependencies in production code.
 
-The GitHub Actions quality job runs these checks on PHP 8.2–8.4 with Laravel 12. Local verification covers PHP 8.4 only; remote CI results are not yet available. The current suite proves scaffold architecture, not icon rendering or replacement. Every generated enum case must later resolve to a real registered SVG, with integration tests for native enum usage, opt-in replacement, fallback, overrides, and multi-panel limitations.
+The GitHub Actions quality job runs these checks on PHP 8.2–8.4 with Laravel 12. Local verification covers PHP 8.4 only; remote CI results are not yet available. The current suite proves scaffold architecture and Laravel provider/config boot behavior, including preservation of existing aliases with replacement disabled. A separate local Laravel 12 application also verified Composer path installation and provider auto-discovery without panel setup. Icon rendering and enabled replacement remain unverified. Every generated enum case must later resolve to a real registered SVG, with integration tests for native enum usage, opt-in replacement, fallback, overrides, and multi-panel limitations.
 
 ## Licensing and scope
 

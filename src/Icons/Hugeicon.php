@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Vendor\FilamentHugeicons\Icons;
+namespace EnigmaInc\FilamentHugeicons\Icons;
 
 /**
  * Placeholder: replace with a generated enum from the installed SVG catalog.
