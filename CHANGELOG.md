@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — preparing 0.1.0-alpha.1
+## 0.1.0-alpha.1 — 2026-11-10
 
 ### Added
 
@@ -15,5 +15,5 @@
 
 - Default icon replacement is excluded. The retained skeleton’s `replaceDefaultIcons()` flag applies no mappings; `overrideAliases()` is unavailable.
 - Replacement fallback, override precedence, and multi-panel behavior remain unverified.
-- Filament 4 is unsupported. Remote compatibility-matrix results and Packagist publication remain release gates.
+- Filament 4 is unsupported. PHP 8.2–8.4 / Laravel 12 passed the remote compatibility matrix.
 - Enum names, backing values, and public APIs may change before v1.0.0. Keep the Blade Hugeicons default prefix.

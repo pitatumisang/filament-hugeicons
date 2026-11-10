@@ -2,7 +2,7 @@
 
 Use Hugeicons Free in Filament 5 through the native `Hugeicon` string-backed enum, without panel plugin setup.
 
-> **Preparing `v0.1.0-alpha.1` — not published yet.** This alpha provides 6,839 enum cases from Blade Hugeicons 2.1.0 for explicit Filament 5 icon usage. Default icon replacement is pending verification and is outside this alpha’s documented scope. The public API and catalog may change before v1.0.0.
+> **`v0.1.0-alpha.1` — early testing release.** This alpha provides 6,839 enum cases from Blade Hugeicons 2.1.0 for explicit Filament 5 icon usage. Default icon replacement is pending verification and is outside this alpha’s documented scope. The public API and catalog may change before v1.0.0.
 
 > **Phase 2 development branch:** optional application-wide default replacement is implemented here. The planned alpha release described below covers Phase 1 only. See [default replacement usage and limitations](docs/default-icon-replacement.md) for this branch.
 
@@ -54,7 +54,7 @@ The implementation must adopt the actual [official plugin skeleton’s 5.x branc
 
 ## Installation
 
-The command below is for use **after** `v0.1.0-alpha.1` is tagged and available on Packagist; publication has not been verified:
+Install the alpha explicitly:
 
 ```sh
 composer require enigmainc/filament-hugeicons:0.1.0-alpha.1
@@ -69,7 +69,7 @@ The explicit prerelease constraint allows this alpha without changing your appli
 | Laravel | Local integration verified on Laravel 12; CI targets Laravel 12 |
 | Blade Hugeicons | Exactly `2.1.0`, preserving the generated catalog |
 
-Configured CI jobs are not evidence of passing remote runs. See [release preparation](docs/releases/0.1.0-alpha.1.md) for outstanding publication gates. The dependency registers the `hugeicons` collection and prefix; this package registers no second collection.
+The enum-only alpha preparation passed CI on PHP 8.2–8.4 / Laravel 12. See [release preparation](docs/releases/0.1.0-alpha.1.md) for verification details. The dependency registers the `hugeicons` collection and prefix; this package registers no second collection.
 
 ## Updating the catalog
 
@@ -107,7 +107,7 @@ To apply changes, use `composer refactor` followed by `composer lint` (`composer
 
 PHPStan analyzes `src`, `config`, `tests`, and `scripts` at `max`, with no baseline or error suppressions. Architecture tests enforce strict types, the string-backed enum contract, icon independence from panel/container setup, native plugin/provider contracts, and restrictions on debugging, test tooling, and database dependencies in production code.
 
-The GitHub Actions quality job runs these checks on PHP 8.2–8.4 with Laravel 12. Local verification covers PHP 8.4 only; remote CI results are not yet available. The current suite proves scaffold architecture and Laravel provider/config boot behavior, including preservation of existing aliases with replacement disabled. A separate local Laravel 12 application also verified Composer path installation and provider auto-discovery without panel setup. Every enum case is tested against its actual registered SVG with fallbacks disabled. Actions, form prefixes, boolean table icons, and navigation items accept cases directly and render through Filament’s native icon helper. Enabled alias replacement, override precedence, and multi-panel isolation remain Phase 2 work.
+The GitHub Actions quality job runs these checks on PHP 8.2–8.4 with Laravel 12. Local verification covers PHP 8.4 only; the enum-only alpha preparation also passed remote CI on PHP 8.2–8.4 with Laravel 12. The current suite proves scaffold architecture and Laravel provider/config boot behavior, including preservation of existing aliases with replacement disabled. A separate local Laravel 12 application also verified Composer path installation and provider auto-discovery without panel setup. Every enum case is tested against its actual registered SVG with fallbacks disabled. Actions, form prefixes, boolean table icons, and navigation items accept cases directly and render through Filament’s native icon helper. Enabled alias replacement, override precedence, and multi-panel isolation remain Phase 2 work.
 
 ## Licensing and scope
 
