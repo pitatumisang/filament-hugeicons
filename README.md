@@ -4,7 +4,7 @@ Use [Hugeicons Free](https://hugeicons.com/) in Filament 5 with a discoverable, 
 
 ## Installation
 
-The upcoming release supports Filament `^5.0`. Version `0.1.0-alpha.3` below requires Filament `^5.11.2`; broad compatibility is not yet published.
+The next release supports **Filament `^5.0` and PHP `^8.2`**, including Filament 5.10.1. This compatibility update is not yet published. The published `0.1.0-alpha.3` release still requires Filament `^5.11.2`.
 
 In your existing Laravel / Filament 5 application, run:
 
@@ -15,22 +15,26 @@ composer require enigmainc/filament-hugeicons:0.1.0-alpha.3 -W
 The `-W` option allows Composer to update locked dependencies, including Filament, to compatible versions. If your application's `composer.json` pins Filament to an older version, update that constraint too:
 
 ```sh
-composer require enigmainc/filament-hugeicons:0.1.0-alpha.3 'filament/filament:^5.0' -W
+composer require enigmainc/filament-hugeicons:0.1.0-alpha.3 'filament/filament:^5.11.2' -W
 ```
 
 The explicit version installs the alpha without changing your application's `minimum-stability`. Laravel discovers the package and its Blade Icons dependency automatically. No panel plugin registration, config publishing, or asset build is required.
 
 ### Requirements
 
-- PHP 8.2 or later within PHP 8.x.
-- Filament 5 (`^5.0`). Filament 4 is unsupported.
+For the next release:
+
+- PHP `^8.2`: PHP 8.2 or later within PHP 8.x.
+- Filament `^5.0`: stable Filament 5.x releases, including 5.0.0 and 5.10.1. Filament 4 is unsupported.
 - Laravel 12 is the tested Laravel version.
+
+These requirements apply to both explicit enum usage and optional default icon replacement. PHP 8.3 is not required.
 
 Composer installs these package dependencies automatically:
 
 | Dependency | Version |
 | --- | --- |
-| `filament/filament` | `^5.0` |
+| `filament/filament` | `^5.0` in the next release; `^5.11.2` in alpha.3 |
 | `spatie/laravel-package-tools` | `^1.16` |
 | `afatmustafa/blade-hugeicons` | `2.1.0` |
 

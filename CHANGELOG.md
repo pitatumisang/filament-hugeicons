@@ -2,10 +2,19 @@
 
 ## Unreleased
 
-- Broaden Filament compatibility from `^5.11.2` to `^5.0`, retaining PHP `^8.2`.
-- Follow installed Filament alias semantics: native normalization when available, exact alias strings otherwise.
-- Add minimum, locked 5.10.1 regression, latest 5.x, and reference-report CI lanes.
+### Changed
+
+- Support Filament `^5.0`, including applications locked to 5.10.1, instead of requiring `^5.11.2`. Applies to explicit enum usage and optional default icon replacement. Filament 4 remains unsupported.
+- Retain PHP `^8.2`, matching Filament 5's minimum; PHP 8.3 is not required.
+- Follow installed Filament alias semantics: native normalization when available, exact alias strings otherwise. Native overrides and unmapped fallback retain their priority.
 - Separate installed alias validation from the pinned Filament 5.11.2 report drift check.
+
+### Verified
+
+- Pass minimum/latest Filament CI on PHP 8.2, 8.3, and 8.4 with Laravel 12, plus exact 5.10.1 regression and 5.11.2 reference-report lanes.
+- Install the candidate in isolated Laravel 12 consumers locked to Filament 5.0.0 and 5.10.1 without updating existing locked dependencies; verify enum rendering, replacement, fallback, and overrides.
+
+These changes require a new release. Published `0.1.0-alpha.3` retains its original Filament `^5.11.2` requirement.
 
 ## 0.1.0-alpha.3 — 2026-11-10
 
