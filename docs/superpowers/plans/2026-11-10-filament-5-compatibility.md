@@ -62,7 +62,7 @@
 - [x] Verify provider discovery, direct enum rendering, optional replacement, fallback, and override priority in the consumers without package development dependencies.
 - [x] Update specifications to the approved ^5.0 scope and document exact alias spelling on older registries. Keep README focused on installation/dependencies/usage; add an Unreleased changelog entry rather than claiming publication.
 - [x] Run `composer check` for the reference environment and all compatibility lanes; report exact dependency versions, test counts, and any limitations. Review the complete diff and run `git diff --check`.
-- [ ] Commit the verified compatibility change. Do not tag or publish a prerelease as part of this plan.
+- [x] Commit the verified compatibility change. Do not tag or publish a prerelease as part of this plan.
 
 ## Self-review
 

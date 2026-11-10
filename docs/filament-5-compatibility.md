@@ -55,8 +55,7 @@ published release or Packagist installation of the new code.
 ## CI and limitations
 
 CI is configured for PHP 8.2–8.4 on exact 5.0.0 and latest 5.x, plus 5.10.1 and
-5.11.2 reference lanes on PHP 8.4. Remote matrix results must be recorded separately;
-the local proof above covers PHP 8.4 only. Intermediate patches are covered by the
+5.11.2 reference lanes on PHP 8.4. The local proof above covers PHP 8.4; the remote runs below verify the expanded PHP matrix. Intermediate patches are covered by the
 supported Composer range, not a claim that every historical patch was run locally.
 
 Filament 5.0.0 has published security advisories and Composer blocks installation
@@ -67,3 +66,18 @@ to deploy a vulnerable historical release.
 
 Application-wide replacement limitations remain unchanged. Per-panel/per-tenant policy
 is unsupported, and a real Octane server has not been tested.
+
+
+## Remote verification
+
+Commit `5e42258` passed [all eight quality jobs](https://github.com/pitatumisang/filament-hugeicons/actions/runs/42798361459):
+minimum/latest on PHP 8.2, 8.3, and 8.4, plus exact 5.10.1 and the 5.11.2 reference
+report on PHP 8.4. The [workflow security check](https://github.com/pitatumisang/filament-hugeicons/actions/runs/42798361600)
+also passed. These results prove the candidate commit; no compatibility prerelease
+has been published and alpha.3's tag remains unchanged.
+
+
+Independent review of the complete implementation found no actionable critical,
+important, or minor issues. Read-only probes on all three versions confirmed
+normalization semantics, override resolution, mapping inventory, and report
+determinism. Real Octane behavior and release publication remain outside this change.
