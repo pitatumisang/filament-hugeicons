@@ -8,7 +8,6 @@ use EnigmaInc\FilamentHugeicons\FilamentHugeiconsPlugin;
 use EnigmaInc\FilamentHugeicons\Icons\Hugeicon;
 use EnigmaInc\FilamentHugeicons\Support\IconMappingRegistry;
 use EnigmaInc\FilamentHugeicons\Tests\TestCase;
-use Filament\Forms\View\FormsIconAlias;
 use Filament\Panel;
 use Filament\Support\Facades\FilamentIcon;
 use Filament\Support\Icons\Heroicon;
@@ -18,6 +17,7 @@ use Illuminate\Config\Repository;
 use Illuminate\Support\Facades\Facade;
 use InvalidArgumentException;
 use LogicException;
+use ReflectionClass;
 
 use function Filament\Support\generate_icon_html;
 
@@ -156,19 +156,25 @@ final class ReplacementPolicyTest extends TestCase
         }
     }
 
-    public function test_legacy_alias_spelling_does_not_defeat_fluent_precedence(): void
+    public function test_alias_spelling_follows_the_installed_registry_when_merging_overrides(): void
     {
-        $canonical = FormsIconAlias::COMPONENTS_RICH_EDITOR_TOOLBAR_BOLD;
+        $canonical = 'forms:components.rich-editor.toolbar.bold';
         $legacy = 'forms::components.rich-editor.toolbar.bold';
         $registry = $this->registry(true, [$canonical => Hugeicon::Search01]);
         $registry->declare(true, [$legacy => Hugeicon::Search02]);
         $registry->finalize();
-        self::assertSame(Hugeicon::Search02->value, FilamentIcon::resolve($canonical));
+        if ((new ReflectionClass(IconManager::class))->hasMethod('normalizeAlias')) {
+            self::assertSame(Hugeicon::Search02->value, FilamentIcon::resolve($canonical));
+        } else {
+            self::assertSame(Hugeicon::Search01->value, FilamentIcon::resolve($canonical));
+        }
+
+        self::assertSame(Hugeicon::Search02->value, FilamentIcon::resolve($legacy));
     }
 
-    public function test_alternate_spellings_merge_across_plugin_calls_and_compare_as_one_policy(): void
+    public function test_plugin_policy_comparison_follows_the_installed_alias_semantics(): void
     {
-        $canonical = FormsIconAlias::COMPONENTS_RICH_EDITOR_TOOLBAR_BOLD;
+        $canonical = 'forms:components.rich-editor.toolbar.bold';
         $legacy = 'forms::components.rich-editor.toolbar.bold';
         $registry = $this->registry(false);
         app()->instance(IconMappingRegistry::class, $registry);
@@ -176,9 +182,17 @@ final class ReplacementPolicyTest extends TestCase
             ->overrideAliases([$canonical => Hugeicon::Search01])
             ->overrideAliases([$legacy => Hugeicon::Search02]);
         Panel::make()->id('legacy')->plugin($plugin);
-        $registry->declare(true, [$canonical => Hugeicon::Search02]);
-        $registry->finalize();
-        self::assertSame(Hugeicon::Search02->value, FilamentIcon::resolve($legacy));
+        if ((new ReflectionClass(IconManager::class))->hasMethod('normalizeAlias')) {
+            $registry->declare(true, [$canonical => Hugeicon::Search02]);
+            $registry->finalize();
+            self::assertSame(Hugeicon::Search02->value, FilamentIcon::resolve($legacy));
+        } else {
+            $registry->finalize();
+            self::assertSame(Hugeicon::Search01->value, FilamentIcon::resolve($canonical));
+            self::assertSame(Hugeicon::Search02->value, FilamentIcon::resolve($legacy));
+            $this->expectException(LogicException::class);
+            $registry->declare(true, [$canonical => Hugeicon::Search02]);
+        }
     }
 
     public function test_override_boundary_rejects_nonarrays_numeric_keys_and_nonicon_values(): void

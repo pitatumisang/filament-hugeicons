@@ -17,16 +17,25 @@ use Filament\Tables\View\TablesIconAlias;
 use Filament\View\PanelsIconAlias;
 use Filament\Widgets\View\WidgetsIconAlias;
 use ReflectionClass;
+use RuntimeException;
 
 /** Development-only inventory; production mappings use direct upstream constants. */
 final class AliasCoverage
 {
+    public const REFERENCE_VERSION = '5.11.2';
+
     /** @return array<string, string> Alias => canonical constant. */
     public function aliases(): array
     {
         $aliases = [];
 
-        foreach ([ActionsIconAlias::class, FormsIconAlias::class, InfolistsIconAlias::class, NotificationsIconAlias::class, QueryBuilderIconAlias::class, SchemasIconAlias::class, SupportIconAlias::class, TablesIconAlias::class, PanelsIconAlias::class, WidgetsIconAlias::class] as $class) {
+        $classes = [ActionsIconAlias::class, FormsIconAlias::class, InfolistsIconAlias::class, NotificationsIconAlias::class, QueryBuilderIconAlias::class, SupportIconAlias::class, TablesIconAlias::class, PanelsIconAlias::class, WidgetsIconAlias::class];
+
+        if (class_exists(SchemasIconAlias::class)) {
+            $classes[] = SchemasIconAlias::class;
+        }
+
+        foreach ($classes as $class) {
             foreach ((new ReflectionClass($class))->getReflectionConstants() as $constant) {
                 if (str_contains($constant->getDocComment() ?: '', '@deprecated')) {
                     continue;
@@ -43,6 +52,22 @@ final class AliasCoverage
         ksort($aliases);
 
         return $aliases;
+    }
+
+    public function isReferenceVersion(): bool
+    {
+        return InstalledVersions::getVersion('filament/filament') === self::REFERENCE_VERSION . '.0';
+    }
+
+    public function validateMappings(): void
+    {
+        $aliases = $this->aliases();
+
+        foreach (DefaultIconMappings::all() as $alias => $icon) {
+            if (! isset($aliases[$alias])) {
+                throw new RuntimeException('Mapped alias [' . $alias . '] is absent from the installed Filament inventory.');
+            }
+        }
     }
 
     public function report(): string

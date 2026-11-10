@@ -1,8 +1,8 @@
 # Optional default icon replacement
 
-The upcoming v0.1.0-alpha.3 release supports replacing 81 of the 221 canonical aliases
+The current implementation supports replacing 81 of the 221 canonical aliases
 in the inspected Filament 5.11.2 source. See the [full mapped/unmapped report](default-icon-coverage.md).
-Earlier enum-only alpha releases do not include replacement.
+Alpha.3 includes replacement but requires Filament ^5.11.2. The next release broadens compatibility to ^5.0.
 
 Replacement is **off by default**. Explicit `Hugeicon` usage always works without
 registering a panel plugin. Unmapped aliases retain Filament's original icons.
@@ -86,7 +86,7 @@ For each alias, precedence from highest to lowest is:
 4. Bundled curated mappings.
 5. Filament's original fallback for unmapped aliases.
 
-Keys must be nonempty alias strings. Aliases are canonicalized using Filament’s native normalizer before merging and policy comparison. This feature requires Filament `^5.11.2` to ensure the verified normalization API is available. Values must be Hugeicon cases or nonempty
+Keys must be nonempty alias strings. When the installed Filament exposes native alias normalization, the package uses it before merging and comparing policies. Earlier Filament 5 registries preserve exact alias strings; alternative spellings remain distinct keys. Use native Filament alias constants. The package supports Filament `^5.0` without replacing its registry or copying its normalization table. Values must be Hugeicon cases or nonempty
 registered Blade Icons identifiers. Native markup/Htmlable customizations continue
 working through Filament's own API, which has priority over package mappings.
 Custom string icons use Blade Icons' native resolution and any application-configured
@@ -99,13 +99,18 @@ scan at runtime and does not install callbacks on each panel boot.
 
 ```sh
 composer icons:coverage       # Regenerate the full mapped/unmapped report
-composer icons:coverage:check # Check report drift without writing
+composer icons:coverage:check # Validate installed aliases; compare report on reference version
+composer icons:coverage:reference:check # Require Filament 5.11.2 and check reference drift
 composer check               # Includes coverage and catalog checks
 ```
 
-Coverage is tied to the installed Filament version; updating Filament may require
-regenerating and reviewing the report, even if mapping counts are unchanged.
-Production mappings use native constants, with no runtime reflection. All mapped constants were also found in upstream v5.0.0 source, but the policy requires
-the native alias-normalization API verified in Filament 5.11.2; Composer therefore
-requires `^5.11.2`. Runtime verification covers PHP 8.4, Laravel 12, and Filament
-5.11.2. The full worker and PHP compatibility matrix remains unverified.
+The committed coverage report is pinned to Filament 5.11.2. Regeneration and explicit
+reference checks require that exact version. Other compatibility lanes validate
+installed mappings and deterministic inventory generation without rewriting the
+reference report. All mapped constants must exist in the installed version.
+
+Production mappings use native constants without scanning alias classes or SVGs at
+runtime. A small compatibility boundary checks for the optional normalization method
+and validates its string result. PHP remains ^8.2, matching Filament 5's minimum.
+See [compatibility verification](filament-5-compatibility.md) for tested versions and
+limitations. Real Octane server behavior remains unverified.

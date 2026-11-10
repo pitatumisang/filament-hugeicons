@@ -13,6 +13,7 @@ use Filament\Support\Icons\IconManager;
 use Illuminate\Contracts\Config\Repository;
 use InvalidArgumentException;
 use LogicException;
+use ReflectionClass;
 
 final class IconMappingRegistry
 {
@@ -83,11 +84,28 @@ final class IconMappingRegistry
                 throw new InvalidArgumentException('Hugeicons overrides require nonempty alias strings and Hugeicon cases or nonempty registered icon strings.');
             }
 
-            $key = IconManager::normalizeAlias($alias);
+            $key = self::normalizeAlias($alias);
             $normalized[$key] = $icon instanceof Hugeicon ? $icon->value : $icon;
         }
 
         ksort($normalized);
+
+        return $normalized;
+    }
+
+    private static function normalizeAlias(string $alias): string
+    {
+        $manager = new ReflectionClass(IconManager::class);
+
+        if (! $manager->hasMethod('normalizeAlias')) {
+            return $alias;
+        }
+
+        $normalized = $manager->getMethod('normalizeAlias')->invoke(null, $alias);
+
+        if (! is_string($normalized)) {
+            throw new LogicException('Filament alias normalization must return a string.');
+        }
 
         return $normalized;
     }

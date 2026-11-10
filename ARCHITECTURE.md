@@ -4,7 +4,7 @@
 
 > Status: implementation blueprint, 2026-11-10. Agreed design is normative; APIs/dependency details marked **VERIFY** must be checked against installed upstream code. This is not a claim that the existing local starter is an official skeleton clone.
 
-> Phase 2 implementation note: this branch requires Filament `^5.11.2` for the verified native alias-normalization API. Replacement is application-wide and disabled by default; see `docs/default-icon-replacement.md` for finalized precedence, lifecycle, and limitations. Earlier proposed options below are retained as design history.
+> Compatibility update: the current implementation targets Filament `^5.0` and PHP `^8.2`. Use native alias normalization where available; older registries preserve exact alias strings. Alpha.3 remains pinned to its original `^5.11.2` requirement. Replacement is application-wide and disabled by default; see `docs/default-icon-replacement.md` for finalized precedence, lifecycle, and limitations. Earlier proposed options below are retained as design history.
 
 ## 1. Architectural principles
 
@@ -64,7 +64,7 @@ Avoid unnecessary empty abstraction layers. Prefer a small service or pure mappe
 
 ## 3. Composer dependencies
 
-- Primary Filament major: `filament/filament: ^5.0` **VERIFY exact supported PHP/Laravel constraints against upstream**.
+- Supported Filament major: `filament/filament: ^5.0`; PHP `^8.2`. Laravel 12 is the tested Laravel version. Minimum, regression, latest, and pinned reference report lanes validate compatibility.
 - Spatie `laravel-package-tools`: use the version and setup from the actual official 5.x skeleton.
 - Blade Icons Hugeicons source: **candidate** `afatmustafa/blade-hugeicons`; alternative `anodyne/blade-hugeicons`. **VERIFY** licenses, maintenance, registered collection prefix, SVG filenames, supported versions, install side effects, and whether its own enum is sufficient.
 - Testing: preserve official skeleton's Pest, Orchestra Testbench, Laravel Pint, PHPStan/Larastan and related tools.

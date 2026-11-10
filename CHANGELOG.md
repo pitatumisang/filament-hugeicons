@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Broaden Filament compatibility from `^5.11.2` to `^5.0`, retaining PHP `^8.2`.
+- Follow installed Filament alias semantics: native normalization when available, exact alias strings otherwise.
+- Add minimum, locked 5.10.1 regression, latest 5.x, and reference-report CI lanes.
+- Separate installed alias validation from the pinned Filament 5.11.2 report drift check.
+
 ## 0.1.0-alpha.3 — 2026-11-10
 
 ### Added

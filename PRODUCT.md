@@ -22,7 +22,7 @@ Create a lightweight, open-source Laravel package that makes the free Hugeicons 
 
 ### Must have (v1)
 
-1. Filament **5.x** as primary supported major version; Filament 4 is a future compatibility evaluation, not a v1 promise.
+1. Filament **5.x**, with Composer constraint `^5.0`, PHP `^8.2`, and tested minimum/regression/latest dependencies. Filament 4 remains outside the current scope.
 2. Project based on the **official `filamentphp/plugin-skeleton` 5.x branch**, preserving its established Composer, package-tools, testing, quality, and release conventions.
 3. A public **singular** `Hugeicon` string-backed PHP enum, with a case for every supported free SVG in the locked source catalog.
 4. Native Filament usage without `->value`, manual SVG paths, manual icon registration, or panel plugin registration for **explicit** enum usage.

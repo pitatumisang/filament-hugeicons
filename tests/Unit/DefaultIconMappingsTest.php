@@ -11,6 +11,7 @@ use EnigmaInc\FilamentHugeicons\Mappings\DefaultIconMappings;
 use Filament\Support\View\SupportIconAlias;
 use Filament\View\PanelsIconAlias;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Process\Process;
 
 final class DefaultIconMappingsTest extends TestCase
 {
@@ -42,10 +43,28 @@ final class DefaultIconMappingsTest extends TestCase
     {
         $coverage = new AliasCoverage;
         $aliases = $coverage->aliases();
-        self::assertSame('Filament\\View\\PanelsIconAlias::AUTH_PASSWORD_RESET_REQUEST_ACTIONS_LOGIN', $aliases[PanelsIconAlias::AUTH_PASSWORD_RESET_REQUEST_ACTIONS_LOGIN]);
+        self::assertArrayHasKey(PanelsIconAlias::GLOBAL_SEARCH_FIELD, $aliases);
         $report = $coverage->report();
         self::assertSame($report, $coverage->report());
-        self::assertSame($report, file_get_contents(__DIR__ . '/../../docs/default-icon-coverage.md'));
+        if (InstalledVersions::getVersion('filament/filament') === '5.11.2.0') {
+            self::assertSame($report, file_get_contents(__DIR__ . '/../../docs/default-icon-coverage.md'));
+        }
+
+        self::assertStringContainsString('| `GLOBAL_SEARCH_FIELD` |', $report);
         self::assertStringContainsString((string) InstalledVersions::getPrettyVersion('filament/filament'), $report);
+    }
+
+    public function test_reference_check_rejects_a_nonreference_dependency_version(): void
+    {
+        $process = new Process([PHP_BINARY, __DIR__ . '/../../scripts/alias-coverage.php', '--check-reference']);
+        $process->run();
+
+        if (InstalledVersions::getVersion('filament/filament') === '5.11.2.0') {
+            self::assertSame(0, $process->getExitCode(), $process->getErrorOutput());
+            self::assertStringContainsString('up to date', $process->getOutput());
+        } else {
+            self::assertSame(1, $process->getExitCode());
+            self::assertStringContainsString('requires Filament 5.11.2', $process->getErrorOutput());
+        }
     }
 }
