@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-alpha.2 — 2026-11-10
+
+- Rewrite the README around Packagist installation and verified action, form, table, and navigation usage.
+- Document supported versions, icon discovery, and alpha limitations.
+- Documentation-only release; runtime code and dependencies are unchanged from alpha.1.
+
 ## 0.1.0-alpha.1 — 2026-11-10
 
 ### Added
