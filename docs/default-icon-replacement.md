@@ -1,8 +1,8 @@
 # Optional default icon replacement
 
-This Phase 2 development branch supports replacing 81 of the 221 canonical aliases
+The upcoming v0.1.0-alpha.3 release supports replacing 81 of the 221 canonical aliases
 in the inspected Filament 5.11.2 source. See the [full mapped/unmapped report](default-icon-coverage.md).
-The original Phase 1 alpha release plan is separate from this branch's new behavior.
+Earlier enum-only alpha releases do not include replacement.
 
 Replacement is **off by default**. Explicit `Hugeicon` usage always works without
 registering a panel plugin. Unmapped aliases retain Filament's original icons.
@@ -86,7 +86,7 @@ For each alias, precedence from highest to lowest is:
 4. Bundled curated mappings.
 5. Filament's original fallback for unmapped aliases.
 
-Keys must be nonempty alias strings. Aliases are canonicalized using Filament’s native normalizer before merging and policy comparison. This branch requires Filament `^5.11.2` to ensure the verified normalization API is available. Values must be Hugeicon cases or nonempty
+Keys must be nonempty alias strings. Aliases are canonicalized using Filament’s native normalizer before merging and policy comparison. This feature requires Filament `^5.11.2` to ensure the verified normalization API is available. Values must be Hugeicon cases or nonempty
 registered Blade Icons identifiers. Native markup/Htmlable customizations continue
 working through Filament's own API, which has priority over package mappings.
 Custom string icons use Blade Icons' native resolution and any application-configured
