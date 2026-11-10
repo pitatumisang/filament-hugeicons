@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — preparing 0.1.0-alpha.3
+## 0.1.0-alpha.3 — 2026-11-10
 
 ### Added
 
@@ -17,7 +17,7 @@
 ### Limitations
 
 - Per-panel, per-request, and per-tenant replacement policies are unsupported. Restart long-running workers after configuration changes; a real Octane server remains untested.
-- Publication and fresh remote compatibility and consumer checks remain release gates. Public APIs and catalog identifiers may change before v1.0.0.
+- Public APIs and catalog identifiers may change before v1.0.0.
 
 ## 0.1.0-alpha.1 / 0.1.0-alpha.2 — enum-only releases
 
