@@ -1,5 +1,18 @@
 # Official skeleton comparison
 
+## Security configuration follow-up (2026-11-16)
+
+Rechecked the official `5.x` branch at
+`8c10f2a15e366101ec7893b92b971b01fba52b44`, including its Composer metadata,
+workflow inventory, `.github/dependabot.yml`, and `.github/SECURITY.md`.
+Adopted its weekly Dependabot checks, seven-day cooldown, and dependency labels
+for Composer and GitHub Actions. Composer version-update PRs are enabled here
+(limit ten rather than upstream's zero); the npm entry is omitted because this
+package has no npm manifest. Replaced the security policy's placeholder email
+with this repository's verified-enabled private vulnerability reporting route.
+Existing package tooling and workflows remain as documented below; this scoped
+comparison does not claim full parity with the current upstream skeleton.
+
 Compared the local scaffold with `filamentphp/plugin-skeleton` branch `5.x`,
 commit `820e4ead635a9c15ce59f767c9d0951282f5b388`, on 2026-11-10.
 The local project was manually assembled; this comparison does not claim full
